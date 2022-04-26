@@ -122,7 +122,7 @@ class TicketController extends UserController
                 ]
             ];
             $context = stream_context_create($opts);
-            file_get_contents('https://sctapi.ftqq.com/' . $ScFtqq_SCKEY . '.send', false, $context);
+            //file_get_contents('https://sctapi.ftqq.com/' . $ScFtqq_SCKEY . '.send', false, $context);
         }
 
         return $response->withJson([
@@ -186,7 +186,7 @@ class TicketController extends UserController
                     ]
                 ];
                 $context = stream_context_create($opts);
-                file_get_contents('https://sctapi.ftqq.com/' . $ScFtqq_SCKEY . '.send', false, $context);
+                //file_get_contents('https://sctapi.ftqq.com/' . $ScFtqq_SCKEY . '.send', false, $context);
             }
         } else {
             if ($_ENV['mail_ticket'] == true && $markdown != '') {
@@ -216,7 +216,7 @@ class TicketController extends UserController
                     ]
                 ];
                 $context = stream_context_create($opts);
-                file_get_contents('https://sctapi.ftqq.com/' . $ScFtqq_SCKEY . '.send', false, $context);
+                //file_get_contents('https://sctapi.ftqq.com/' . $ScFtqq_SCKEY . '.send', false, $context);
             }
         }
 
@@ -274,7 +274,7 @@ class TicketController extends UserController
             $this->view()
                 ->assign('ticketset', $ticketset)
                 ->assign('id', $id)
-                ->assing('ticket_main',$ticket_main)
+                ->assign('ticket_main',$ticket_main)
                 ->assign('render', $render)
                 ->display('user/ticket_view.tpl')
         );
