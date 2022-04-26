@@ -274,6 +274,7 @@ class TicketController extends UserController
             $this->view()
                 ->assign('ticketset', $ticketset)
                 ->assign('id', $id)
+                ->assing('ticket_main',$ticket_main)
                 ->assign('render', $render)
                 ->display('user/ticket_view.tpl')
         );
