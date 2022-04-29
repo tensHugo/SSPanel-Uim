@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `forbidden_port` varchar(512) COLLATE utf8mb4_unicode_ci DEFAULT '''''',
   `auto_reset_day` int(11) NOT NULL DEFAULT 0,
   `auto_reset_bandwidth` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `is_legalize` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否实名认证'
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `uuid` (`uuid`),
