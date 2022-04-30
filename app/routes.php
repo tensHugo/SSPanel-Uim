@@ -34,6 +34,7 @@ return function (SlimApp $app) {
         $this->get('/profile',                  App\Controllers\UserController::class . ':profile');
         $this->get('/invite',                   App\Controllers\UserController::class . ':invite');
         $this->get('/disable',                  App\Controllers\UserController::class . ':disable');
+        $this->get('/legalize',                  App\Controllers\UserController::class . ':legalize');
 
         $this->get('/node',                     App\Controllers\User\NodeController::class . ':user_node_page');
         $this->get('/node/{id}/ajax',           App\Controllers\User\NodeController::class . ':user_node_ajax');
