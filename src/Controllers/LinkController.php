@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Models\{
     Link,
     User,
+    Setting,
     UserSubscribeLog
 };
 use App\Utils\{
@@ -80,6 +81,11 @@ class LinkController extends BaseController
         if ($user == null) {
             return null;
         }
+
+        //实名验证
+        // if($user->is_legalize != 1 && Setting::obtain('is_legalize') == 1){
+        //     return '未实名认证，无法使用';
+        // }
 
         $opts = $request->getQueryParams();
 
@@ -290,7 +296,7 @@ class LinkController extends BaseController
                     'suffix'   => 'txt',
                     'class'    => 'AnXray'
                 ];
-                break;	
+                break;
             case 'surfboard':
                 $return = [
                     'filename' => 'Surfboard',
@@ -483,7 +489,7 @@ class LinkController extends BaseController
                 break;
             case 'anxray':
                 $return = AppURI::getAnXrayURI($item);
-                break;	
+                break;
             case 'surge':
                 $return = AppURI::getSurgeURI($item, 3);
                 break;
@@ -821,10 +827,10 @@ class LinkController extends BaseController
     {
         $subInfo = self::getSubinfo($user, $anxray);
         $All_Proxy  = '';
-        $userapiUrl = $subInfo['anxray'];	
-        $items = URL::getNew_AllItems($user, $Rule); 
+        $userapiUrl = $subInfo['anxray'];
+        $items = URL::getNew_AllItems($user, $Rule);
         foreach ($items as $item) {
-                $out = AppURI::getAnXrayURI($item);	
+                $out = AppURI::getAnXrayURI($item);
                 if ($out !== null) {
                   $All_Proxy .= $out . PHP_EOL;
                 }

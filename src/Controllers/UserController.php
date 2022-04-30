@@ -6,7 +6,8 @@ use App\Services\{
     Auth,
     Captcha,
     Config,
-    Payment
+    Payment,
+    Legalize
 };
 use App\Models\{
     Ip,
@@ -30,7 +31,8 @@ use App\Models\{
     StreamMedia,
     EmailVerify,
     ProductOrder,
-    UserSubscribeLog
+    UserSubscribeLog,
+    LegalizeLog
 };
 use App\Utils\{
     GA,
@@ -466,7 +468,7 @@ class UserController extends BaseController
             return $response->withJson($res);
         };
 
-        $boughts = Bought::where('userid', $this->user->id)->orderBy('id', 'desc')->get();
+        $boughts = Bought::where('userid',$this->user->id)->orderBy('id', 'desc')->get();
 
         return $response->write(
             $this->view()
@@ -512,16 +514,16 @@ class UserController extends BaseController
         $results = [];
         $db = new DatatablesHelper;
         $nodes = $db->query('SELECT DISTINCT node_id FROM stream_media');
-        
+
         foreach ($nodes as $node_id)
         {
             $node = Node::where('id', $node_id)->first();
-            
+
             $unlock = StreamMedia::where('node_id', $node_id)
             ->orderBy('id', 'desc')
             ->where('created_at', '>', time() - 86460) // 只获取最近一天零一分钟内上报的数据
             ->first();
-            
+
             if ($unlock != null && $node != null) {
                 $details = json_decode($unlock->result, true);
                 $details = str_replace('Originals Only', '仅限自制', $details);
@@ -535,7 +537,7 @@ class UserController extends BaseController
                         'unlock_item' => $details
                     ];
                 }
-                
+
                 array_push($results, $info);
             }
         }
@@ -553,20 +555,20 @@ class UserController extends BaseController
                     $details = json_decode($value_node->result, true);
                     $details = str_replace('Originals Only', '仅限自制', $details);
                     $details = str_replace('Oversea Only', '仅限海外', $details);
-                    
+
                     $info = [
                         'node_name' => $key_node->name,
                         'created_at' => $value_node->created_at,
                         'unlock_item' => $details
                     ];
-                    
+
                     array_push($results, $info);
                 }
            }
         }
 
         array_multisort(array_column($results, 'node_name'), SORT_ASC, $results);
-        
+
         return $this->view()
             ->assign('results', $results)
             ->display('user/media.tpl');
@@ -982,6 +984,11 @@ class UserController extends BaseController
      */
     public function buy_traffic_package($request, $response, $args)
     {
+        if($this->user->is_legalize != 1 && Setting::obtain('is_legalize') == 1){
+            $res['ret'] = 0;
+            $res['msg'] = '您还未完成实名认证，暂时无法购买。<a href="/user/legalize">立即前往认证</a>';
+            return $response->withJson($res);
+        }
         $user = $this->user;
         $shop = $request->getParam('shop');
         $shop = Shop::where('id', $shop)->where('status', 1)->first();
@@ -1042,6 +1049,13 @@ class UserController extends BaseController
      */
     public function buy($request, $response, $args)
     {
+
+        if($this->user->is_legalize != 1 && Setting::obtain('is_legalize') == 1){
+            $res['ret'] = 0;
+            $res['msg'] = '您还未完成实名认证，暂时无法购买。<a href="/user/legalize">立即前往认证</a>';
+            return $response->withJson($res);
+        }
+
         $user   = $this->user;
         $coupon = $request->getParam('coupon');
         $coupon = trim($coupon);
@@ -1819,4 +1833,43 @@ class UserController extends BaseController
         $this->user = $user;
         return $this->getPcClient($request, $response, $args);
     }
+
+
+    public function legalize($request, $response, $args)
+    {
+
+        if($this->user->is_legalize==1 || Setting::obtain('is_legalize')==0){
+            return $this->view()
+            ->assign('verifyurl','#')
+            ->fetch('user/legalize.tpl');
+        }
+
+        $legalize = LegalizeLog::where('user_id',$this->user->id)->first();
+        if($legalize==null){
+            $legalize = new LegalizeLog;
+            $bizNo = 'RZ'. $this->user->id . time();
+            $legalize->bizNo = $bizNo;
+            $legalize->user_id = $this->user->id;
+            $legalize->type = 1; //暂时只支持个人认证
+            $legalize->add_time = time();
+        }else{
+            $bizNo = $legalize->bizNo;
+            $legalize->up_time = time();
+        }
+
+        if($legalize->save()){
+            $rz = Legalize::verified($bizNo);
+            if($rz->code == "0000"){
+                $verifyurl = $rz->verifyUrl;
+            }else{
+                $verifyurl = '公安系统返回错误，错误信息：' . $rz->msg;
+            }
+        }else{
+            $verifyurl = '内部服务器出错！';
+        }
+        return $this->view()
+        ->assign('verifyurl',$verifyurl)
+        ->fetch('user/legalize.tpl');
+    }
+
 }
