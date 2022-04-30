@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `forbidden_port` varchar(512) COLLATE utf8mb4_unicode_ci DEFAULT '''''',
   `auto_reset_day` int(11) NOT NULL DEFAULT 0,
   `auto_reset_bandwidth` decimal(12,2) NOT NULL DEFAULT 0.00,
-  `is_legalize` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否实名认证'
+  `legname` varchar(255) NULL COMMENT '真实姓名',
+  `is_legalize` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否实名认证',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `uuid` (`uuid`),
@@ -247,7 +248,8 @@ INSERT INTO `config` (`id`, `item`, `value`, `class`, `is_public`, `type`, `defa
 (126, 'stripe_card', '0', 'stripe', 0, 'bool', '0', '银行卡支付'),
 (127, 'stripe_alipay', '0', 'stripe', 0, 'bool', '0', '支付宝支付'),
 (128, 'stripe_wechat', '0', 'stripe', 0, 'bool', '0', '微信支付'),
-(129, 'stripe_max_recharge', '1000', 'stripe', 1, 'int', '1000', '最高充值限额');
+(129, 'stripe_max_recharge', '1000', 'stripe', 1, 'int', '1000', '最高充值限额'),
+(130, 'is_legalize', '0', 'register', 1, 'bool', '0', '是否开启实名认证');
 
 
 CREATE TABLE IF NOT EXISTS `coupon` (
@@ -514,3 +516,20 @@ CREATE TABLE IF NOT EXISTS `user_token` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_token_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `legalize_log`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `bizNo` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '认证的业务流水号',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `type` enum('1','2') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '认证类型，1：个人，2：企业',
+  `paperworkNo` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '证件号',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '认证名称',
+  `pw_pic` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '证件照1',
+  `pw_pic1` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '证件照1',
+  `pw_video` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '认证视频',
+  `pw_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '认证照片',
+  `up_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
+  `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
+  `status` enum('0','1') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '认证状态，0:未成功，1:认证成功',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
