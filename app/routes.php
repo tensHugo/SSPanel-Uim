@@ -14,6 +14,13 @@ return function (SlimApp $app) {
     $app->get('/tos',       App\Controllers\HomeController::class . ':tos');
     $app->get('/staff',     App\Controllers\HomeController::class . ':staff');
 
+
+    $app->group('/legalize', function () {
+        //实名认证回调
+        $this->post('/notifyUrl',       App\Controllers\LegalizeController::class . ':notifyUrl');
+        $this->post('/returnUrl',       App\Controllers\LegalizeController::class . ':returnUrl');
+    });
+
     // other
     $app->post('/notify',               App\Controllers\HomeController::class . ':notify');
 
@@ -101,6 +108,7 @@ return function (SlimApp $app) {
 
         // getPcClient
         $this->get('/getPcClient',              App\Controllers\UserController::class . ':getPcClient');
+
 
         //Reconstructed Payment System
         $this->post('/payment/purchase/{type}',        App\Services\Payment::class . ':purchase');

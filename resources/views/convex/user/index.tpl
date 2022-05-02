@@ -21,7 +21,7 @@
                         <div class="container-fluid">
                             {if $user->is_legalize==0 && $config['is_legalize']==1}
                             <div class="alert alert-warning">
-                                <strong>注意！</strong>您还未完成实名认证，暂时无法正常使用。<a href="/user/legalize">点此前往认证</a>
+                                <strong>注意！</strong>您还未完成实名认证，暂时无法正常购买套餐。<a href="/user/legalize">点此前往认证</a>
                             </div>
                             {/if}
                             <section id="minimal-statistics-bg">

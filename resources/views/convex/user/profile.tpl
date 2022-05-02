@@ -43,7 +43,8 @@
                                                     <p class="grey font-small-2">{$user->user_name}</p>
                                                     {if $user->is_legalize==0 && $config['is_legalize']==1}
                                                     <a href="#" title="点此进行实名认证"><span class="badge badge-warning">未实名认证</span></a>
-                                                    {else}
+                                                    {/if}
+                                                    {if $user->is_legalize==1 && $config['is_legalize']==1}
                                                     <span class="badge badge-success">已实名：{$user->legname}</span>
                                                     {/if}
                                                 </div>

@@ -1838,16 +1838,19 @@ class UserController extends BaseController
     public function legalize($request, $response, $args)
     {
 
+
         if($this->user->is_legalize==1 || Setting::obtain('is_legalize')==0){
             return $this->view()
             ->assign('verifyurl','#')
             ->fetch('user/legalize.tpl');
         }
 
-        $legalize = LegalizeLog::where('user_id',$this->user->id)->first();
+        $legalize = LegalizeLog::where('user_id',$this->user->id)
+                    ->where('status','0')
+                    ->first();
         if($legalize==null){
             $legalize = new LegalizeLog;
-            $bizNo = 'RZ'. $this->user->id . time();
+            $bizNo = 'RZ'. $this->user->id . '-' . time();
             $legalize->bizNo = $bizNo;
             $legalize->user_id = $this->user->id;
             $legalize->type = 1; //暂时只支持个人认证

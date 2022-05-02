@@ -517,6 +517,7 @@ CREATE TABLE IF NOT EXISTS `user_token` (
   CONSTRAINT `user_token_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `legalize_log`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `bizNo` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '认证的业务流水号',
@@ -524,12 +525,15 @@ CREATE TABLE IF NOT EXISTS `legalize_log`  (
   `type` enum('1','2') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '认证类型，1：个人，2：企业',
   `paperworkNo` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '证件号',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '认证名称',
-  `pw_pic` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '证件照1',
-  `pw_pic1` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '证件照1',
-  `pw_video` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '认证视频',
-  `pw_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '认证照片',
+  `gender` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '性别',
+  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '证件地址',
+  `pw_pic` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '证件照1',
+  `pw_pic1` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '证件照1',
+  `pw_video` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '认证视频',
+  `pw_image` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '认证照片',
+  `err_msg` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '认证机构返回的错误消息',
   `up_time` int(11) NULL DEFAULT NULL COMMENT '更新时间',
   `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
-  `status` enum('0','1') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '认证状态，0:未成功，1:认证成功',
+  `status` enum('0','1','-1') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '认证状态，0:未成功，1:认证成功,-1认证超时',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;

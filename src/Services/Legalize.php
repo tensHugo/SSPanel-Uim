@@ -13,8 +13,9 @@ class Legalize
         $method = "POST";
         $appcode = "b74cc454ba11442da64d701814eea038";
         $pageTitle = "公安一所CTID实人认证系统";
-        $notifyUrl = "https://nb-fengyuan.com";  //认证回调
-        $returnUrl = "https://nb-fengyuan.com";  //认证完成返回页面
+        $notifyUrl = $_ENV['baseUrl'] . '/legalize/notifyUrl';  //认证回调
+        $returnUrl = $_ENV['baseUrl'] . '/legalize/returnUrl';  //认证完成返回页面
+        
 
         $headers = array();
         array_push($headers, "Authorization:APPCODE " . $appcode);

@@ -952,4 +952,13 @@ class User extends Model
 
         return $loginip->save();
     }
+
+
+    public function legalize($name)
+    {
+        $this->legname = $name;
+        $this->is_legalize = '1';
+        return $this->save();
+    }
+
 }

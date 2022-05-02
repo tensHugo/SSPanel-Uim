@@ -74,6 +74,11 @@
             qrcode1.clear();
             qrcode1.makeCode(ga_qrcode);
             {/if}
+            
+            $('#check').click(function(){
+                location.reload();
+            })
+            
         </script>
     </body>
 </html>
