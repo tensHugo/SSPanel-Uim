@@ -11,8 +11,8 @@ return function (SlimApp $app) {
     $app->get('/404',       App\Controllers\HomeController::class . ':page404');
     $app->get('/405',       App\Controllers\HomeController::class . ':page405');
     $app->get('/500',       App\Controllers\HomeController::class . ':page500');
-    $app->get('/tos',       App\Controllers\HomeController::class . ':tos');
-    $app->get('/staff',     App\Controllers\HomeController::class . ':staff');
+    $app->get('/privacy',       App\Controllers\HomeController::class . ':privacy');
+    $app->get('/useragr',     App\Controllers\HomeController::class . ':useragr');
 
 
     $app->group('/legalize', function () {

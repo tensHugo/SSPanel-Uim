@@ -51,10 +51,13 @@
                                         </div>
                                     </div>
                                 </form>
+                                <div class="text-center mb-2 mr-sm-2 mb-sm-0">
+                                   阅读<a target="_blank" href="/useragr">《用户协议》</a>和 <a target="_blank" href="/privacy">《隐私政策》</a>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer grey darken-1">
-                            <div class="text-center mb-1">忘记密码? <a><b>点此找回</b></a></div>
+                            <div class="text-center mb-1">忘记密码? <a onclick="alert('找回密码功能即将开放');"><b>点此找回</b></a></div>
                             <div class="text-center">还没有账号? <a href="/auth/register"><b>点此注册</b></a></div>
                         </div>
                     </div>

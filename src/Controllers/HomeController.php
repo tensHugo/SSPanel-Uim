@@ -44,9 +44,9 @@ class HomeController extends BaseController
      * @param Response  $response
      * @param array     $args
      */
-    public function tos($request, $response, $args): ResponseInterface
+    public function privacy($request, $response, $args): ResponseInterface
     {
-        return $response->write($this->view()->fetch('tos.tpl'));
+        return $response->write($this->view()->fetch('privacy.tpl'));
     }
 
     /**
@@ -54,9 +54,9 @@ class HomeController extends BaseController
      * @param Response  $response
      * @param array     $args
      */
-    public function staff($request, $response, $args): ResponseInterface
+    public function useragr($request, $response, $args): ResponseInterface
     {
-        return $response->write($this->view()->fetch('staff.tpl'));
+        return $response->write($this->view()->fetch('user_agr.tpl'));
     }
 
     /**
@@ -109,4 +109,6 @@ class HomeController extends BaseController
     {
         return $response->write($this->view()->fetch('500.tpl'));
     }
+
+
 }
